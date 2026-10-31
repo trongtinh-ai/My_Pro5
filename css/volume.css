@@ -1,0 +1,119 @@
+/* ==========================================================================
+   Music volume popup (created by initBGM in js/main.js)
+   Uses the site's CSS variables from style.css
+   ========================================================================== */
+.vol-pop {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--card, rgba(8, 15, 32, 0.72));
+  border: 1px solid var(--line-strong, rgba(56, 189, 248, 0.45));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  color: var(--text, #f1f5f9);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(6px) scale(0.96);
+  transition: opacity .2s ease, transform .2s ease, visibility 0s linear .2s;
+}
+
+.vol-pop.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.vol-ico {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: var(--accent, #38bdf8);
+}
+
+.vol-ico svg.i {
+  width: 18px;
+  height: 18px;
+}
+
+.vol-val {
+  min-width: 40px;
+  text-align: right;
+  font: 700 13px/1 'Rajdhani', sans-serif;
+  letter-spacing: .06em;
+  color: var(--text-dim, #cbd5e1);
+}
+
+/* Slider */
+.vol-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 130px;
+  height: 4px;
+  margin: 0;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(to right,
+      var(--accent, #38bdf8) var(--p, 75%),
+      rgba(255, 255, 255, .18) var(--p, 75%));
+}
+
+.vol-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--accent, #38bdf8);
+  box-shadow: 0 0 8px var(--accent-glow, rgba(56, 189, 248, 0.35));
+  transition: transform .15s ease;
+}
+
+.vol-range::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--accent, #38bdf8);
+  box-shadow: 0 0 8px var(--accent-glow, rgba(56, 189, 248, 0.35));
+}
+
+.vol-range::-moz-range-track {
+  background: transparent;
+}
+
+.vol-range:hover::-webkit-slider-thumb,
+.vol-range:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+}
+
+.vol-range:focus-visible {
+  outline: 2px solid var(--accent, #38bdf8);
+  outline-offset: 6px;
+}
+
+/* Bigger touch target on phones / tablets */
+@media (pointer: coarse) {
+  .vol-range { height: 6px; }
+  .vol-range::-webkit-slider-thumb { width: 20px; height: 20px; }
+  .vol-range::-moz-range-thumb { width: 16px; height: 16px; }
+}
+
+@media (max-width: 600px) {
+  .vol-range { width: 100px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vol-pop, .vol-pop.show { transition: none; }
+}

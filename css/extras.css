@@ -1,0 +1,492 @@
+/* ==========================================================================
+   EXTRAS: HUD khởi động, nút nhạc / hiệu ứng, card 3D, Discord, nút copy
+   (file riêng, không đụng style.css)
+   ========================================================================== */
+
+/* ---------- HUD khởi động ---------- */
+#boot {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  background: #030612;
+  cursor: pointer;
+  transition: opacity 0.5s ease, visibility 0.5s;
+}
+
+#boot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(56, 189, 248, 0.04) 0 1px, transparent 1px 3px);
+}
+
+#boot.out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.boot-box {
+  position: relative;
+  width: min(460px, 86vw);
+  font: 600 13px/1.9 'Rajdhani', monospace;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+
+#bootlog {
+  font: inherit;
+  white-space: pre-wrap;
+  min-height: 7.6em;
+  text-shadow: 0 0 10px var(--accent-glow);
+  transition: color 0.3s;
+}
+
+#bootlog::after {
+  content: "▌";
+  animation: blink 1s steps(2) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+#boot.ok #bootlog {
+  color: #ffffff;
+}
+
+.boot-bar {
+  height: 2px;
+  margin-top: 14px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: rgba(56, 189, 248, 0.15);
+}
+
+.boot-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+  transition: width 2.2s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+/* card chỉ trượt vào sau khi HUD tắt */
+.booting .pcard>* {
+  animation-play-state: paused;
+}
+
+/* ---------- Nút nhạc + nút hiệu ứng (trên header) ---------- */
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.tb {
+  width: 32px;
+  height: 28px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  background: rgba(8, 16, 36, 0.6);
+  color: var(--muted);
+  transition: all 0.2s;
+}
+
+.tb svg {
+  width: 14px;
+  height: 14px;
+}
+
+.tb:hover {
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+.tb.on {
+  color: var(--accent);
+  background: rgba(56, 189, 248, 0.18);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+}
+
+.tb.dis {
+  opacity: 0.45;
+}
+
+/* ---------- Card Profile 3D: vệt sáng theo chuột ---------- */
+.pcard {
+  backface-visibility: hidden;
+}
+
+.pcard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+  background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 0%), rgba(255, 255, 255, 0.16), transparent 62%);
+}
+
+.pcard:hover::after {
+  opacity: 1;
+}
+
+/* ---------- Trạng thái Discord (đang chơi / đang nghe) ---------- */
+.act {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-box, 10px);
+  background: rgba(14, 25, 48, 0.45);
+  background-clip: padding-box;
+}
+
+.act[hidden],
+.act img[hidden],
+.act small[hidden] {
+  display: none;
+}
+
+.act img {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: none;
+}
+
+.act div {
+  min-width: 0;
+}
+
+.act b {
+  display: block;
+  font: 700 12.5px 'Rajdhani', sans-serif;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.act small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Modal Contact: nút copy email ---------- */
+.ctw {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ctw a {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.cp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(14, 25, 48, 0.45);
+  color: var(--accent);
+  font: 700 12px 'Rajdhani', sans-serif;
+  letter-spacing: 0.12em;
+  transition: all 0.2s;
+}
+
+.cp svg {
+  width: 15px;
+  height: 15px;
+}
+
+.cp em {
+  font-style: normal;
+}
+
+.cp:hover {
+  border-color: var(--accent);
+  background: rgba(56, 189, 248, 0.14);
+  color: #ffffff;
+}
+
+.cp.done {
+  border-color: #3ba55d;
+  color: #3ba55d;
+  background: rgba(59, 165, 93, 0.12);
+}
+
+/* ---------- Chế độ giảm hiệu ứng ---------- */
+.lite .bg-img {
+  animation: none;
+}
+
+.lite .bg-vid {
+  display: none;
+}
+
+.lite .pcard::after {
+  display: none;
+}
+
+/* ==========================================================================
+   MODAL ABOUT ME (thẻ nhân vật)
+   ========================================================================== */
+.ab {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.abh {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.abav {
+  width: 76px;
+  height: 76px;
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+.abn {
+  font: 700 26px 'Rajdhani', sans-serif;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+}
+
+.abr {
+  font: 600 13px 'Rajdhani', sans-serif;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+
+.abp {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--text-dim);
+  padding-left: 14px;
+  border-left: 2px solid var(--accent);
+}
+
+.abi {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.abi div {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(14, 25, 48, 0.45);
+  background-clip: padding-box;
+}
+
+.abi small {
+  display: block;
+  font: 600 10.5px 'Rajdhani', sans-serif;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.abi b {
+  font: 700 15px 'Inter', sans-serif;
+  color: #ffffff;
+}
+
+.abg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.ab h4 {
+  font: 700 13px 'Rajdhani', sans-serif;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.abg>div>h4:not(:first-child) {
+  margin-top: 20px;
+}
+
+.sk {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13.5px;
+  color: #e5effc;
+}
+
+.pips {
+  display: flex;
+  gap: 4px;
+}
+
+.pips i {
+  width: 18px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pips i.on {
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  box-shadow: 0 0 8px var(--accent-glow);
+  transform-origin: left;
+  animation: pip 0.45s ease both;
+}
+
+.pips i:nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.pips i:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.pips i:nth-child(4) {
+  animation-delay: 0.18s;
+}
+
+.pips i:nth-child(5) {
+  animation-delay: 0.24s;
+}
+
+@keyframes pip {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+}
+
+.ab .chips {
+  gap: 8px;
+}
+
+.ab .chips span {
+  font-size: 12.5px;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.qt {
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(14, 25, 48, 0.45);
+  background-clip: padding-box;
+}
+
+.qt b {
+  display: block;
+  font-size: 13.5px;
+  color: #ffffff;
+}
+
+.qt small {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .abi {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .abg {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hp {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-22px) scale(.97);
+  transition: opacity .35s cubic-bezier(.2, .8, .2, 1), transform .5s cubic-bezier(.2, .8, .2, 1), visibility 0s .5s;
+  will-change: transform, opacity
+}
+
+.hp.fl {
+  transform: translateX(22px) scale(.97)
+}
+
+.hp.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  transition-delay: 0s
+}
+
+.hp .hpb {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px
+}
+
+.hp .hpb>*,
+.hp .hpb>*>* {
+  animation: hpIn .5s cubic-bezier(.2, .8, .2, 1) both
+}
+
+@keyframes hpIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px)
+  }
+
+  to {
+    opacity: 1;
+    transform: none
+  }
+}
+
+.pcard .row {
+  transition: transform .3s cubic-bezier(.2, .8, .2, 1), box-shadow .3s, border-color .3s, background .3s
+}
+
+.pcard .row.hot {
+  box-shadow: 0 0 22px rgba(56, 189, 248, .28)
+}

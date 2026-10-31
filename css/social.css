@@ -1,0 +1,41 @@
+/* ==========================================================
+   social.css — Bước 3: icon social
+   C9: bị hút nhẹ về phía con trỏ (JS đặt transform)
+   C8: chú thích nhỏ hiện phía trên icon
+   Load SAU glow.css / reveal.css. Cần social.js.
+   ========================================================== */
+
+/* giữ transition của glow.css, chỉnh transform cho mượt khi bị hút */
+.pcard .soc a {
+  transition: background-color .25s, border-color .25s,
+              box-shadow .25s, color .25s, transform .18s ease-out;
+}
+
+/* chú thích: 1 phần tử dùng chung, gắn vào <body> nên không bị overflow cắt */
+.soc-tip {
+  position: fixed;
+  z-index: 60;
+  left: 0; top: 0;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font: 600 11px/1 var(--font-head, "Montserrat", system-ui, sans-serif);
+  letter-spacing: .06em;
+  white-space: nowrap;
+  color: #fff;
+  background: rgba(10, 16, 30, .92);
+  border: 1px solid rgba(var(--accent-rgb, 111, 179, 224), .55);
+  box-shadow: 0 0 14px rgba(var(--accent-rgb, 111, 179, 224), .3);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 6px));
+  transition: opacity .15s ease, transform .15s ease;
+}
+.soc-tip.on {
+  opacity: 1;
+  transform: translate(-50%, calc(-100% - 12px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pcard .soc a { transform: none !important; }
+  .soc-tip, .soc-tip.on { transition: none; }
+}

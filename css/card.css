@@ -1,0 +1,252 @@
+/* ==========================================================================
+   PROFILE CARD REDESIGN (loads after style.css, overrides it)
+   Idea: ONE calm glass surface; everything inside is flat (no boxes, no glow).
+   Accent color is used only for: status dot, avatar ring, hover states.
+   To go back to the old look, remove the <link> to this file in index.html.
+   ========================================================================== */
+.pcard.glass {
+  position: relative;
+  padding: 22px 18px 12px;
+  gap: 0;
+  background: rgba(12, 20, 36, 0.58);
+  /* blur moved to ::before below: backdrop-filter on the card itself flattens
+     its children, so nothing inside could float in 3D */
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  transform-style: preserve-3d;
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  will-change: transform;
+}
+
+/* Frosted layer: same blur as before, but on its own child so the card's
+   content can keep its depth. saiyan.css already hides ::before in cine-on. */
+.pcard.glass::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  backdrop-filter: blur(20px) saturate(120%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* the avatar row and the social row must keep 3D too, or they flatten their children */
+.pcard .who,
+.pcard .soc {
+  transform-style: preserve-3d;
+}
+
+/* Depth on hover: avatar and social buttons float off the card while it tilts.
+   Uses the `translate` property so it never clashes with `transform`
+   (avatar scale/shake, social.js magnet).
+   Off in html.lite, html.cine-on and prefers-reduced-motion (rules simply don't apply). */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.lite):not(.cine-on) .pcard .av {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease,
+      translate 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  html:not(.lite):not(.cine-on) .pcard.glass:hover .av {
+    translate: 0 0 26px;
+  }
+
+  html:not(.lite):not(.cine-on) .pcard .soc a {
+    transition: background-color 0.25s, border-color 0.25s, box-shadow 0.25s, color 0.25s,
+      transform 0.18s ease-out, translate 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s);
+  }
+  html:not(.lite):not(.cine-on) .pcard.glass:hover .soc a {
+    translate: 0 0 34px;
+  }
+  /* pop up one after another (delay only on the way up) */
+  html:not(.lite):not(.cine-on) .pcard.glass:hover .soc a:nth-child(2) { --d: 0.05s; }
+  html:not(.lite):not(.cine-on) .pcard.glass:hover .soc a:nth-child(3) { --d: 0.1s; }
+  html:not(.lite):not(.cine-on) .pcard.glass:hover .soc a:nth-child(4) { --d: 0.15s; }
+}
+
+/* Glass specular light reflection following mouse cursor */
+.pcard.glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle 280px at var(--card-mx, -500px) var(--card-my, -500px), rgba(255, 255, 255, 0.12), transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 5;
+}
+
+.pcard.glass:hover::after {
+  opacity: 1;
+}
+
+/* header: quiet label + status */
+.pcard .phead {
+  padding: 0 4px 6px;
+  border: 0;
+  font: 600 11px var(--font-head);
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.pcard .phead span { text-shadow: none; gap: 7px; }
+.pcard .phead svg.i { width: 14px; height: 14px; opacity: 0.7; }
+.pcard .st { font-weight: 600; letter-spacing: 0.1em; color: var(--muted); }
+.pcard .dot {
+  position: relative;
+  box-shadow: 0 0 8px currentColor;
+}
+.pcard .dot::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0.8;
+  animation: dotRadarPulse 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  pointer-events: none;
+}
+@keyframes dotRadarPulse {
+  0% { transform: scale(1); opacity: 0.85; }
+  100% { transform: scale(3.2); opacity: 0; }
+}
+
+/* identity: no box around the avatar row */
+.pcard .who {
+  padding: 22px 4px 18px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  gap: 16px;
+}
+.pcard .av {
+  width: 72px;
+  height: 72px;
+  box-shadow: none;
+}
+.pcard .nm {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.pcard .hd { margin: 2px 0 6px; font-size: 12.5px; }
+.pcard .role {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+.pcard .role i { display: none; }
+
+/* the quote already appears in the hero on the right, so hide the duplicate */
+.pcard .bub { display: none; }
+.pcard .bio { padding: 0 4px 14px; font-size: 13px; color: var(--text-dim); }
+
+/* location + clock: one hairline strip instead of two boxes */
+.pcard .two {
+  display: flex;
+  gap: 0;
+  padding: 14px 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.pcard .mini {
+  flex: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  gap: 10px;
+}
+.pcard .mini:hover { background: none; border: 0; }
+.pcard .mini svg.i { width: 16px; height: 16px; color: var(--muted); }
+.pcard .mini b { font-size: 13px; font-weight: 600; letter-spacing: 0; text-transform: none; }
+.pcard .mini small { font-size: 11px; color: var(--muted); }
+
+/* socials: soft round buttons, no outlines */
+.pcard .soc { display: flex; gap: 8px; padding: 16px 4px 10px; }
+.pcard .soc a {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+  color: var(--text-dim);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.pcard .soc a svg.i { width: 18px; height: 18px; }
+.pcard .soc a:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* navigation rows: flat list, highlight only on hover */
+.pcard .row {
+  width: 100%;
+  margin: 0;
+  padding: 11px 10px;
+  gap: 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+.pcard .row:hover { background: rgba(255, 255, 255, 0.06); }
+.pcard .row .ic {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+.pcard .row:hover .ic { background: none; color: var(--accent); }
+.pcard .row .ic svg.i { width: 20px; height: 20px; }
+.pcard .row b {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text);
+}
+.pcard .row small { font-size: 12px; color: var(--muted); }
+.pcard .row .go { opacity: 0.35; transition: opacity 0.2s ease, transform 0.2s ease; }
+.pcard .row:hover .go { opacity: 1; transform: translateX(3px); }
+.pcard .row.hot { background: rgba(255, 255, 255, 0.06); }
+
+/* ==========================================================================
+   SUPER SAIYAN EFFECT: keep it aligned with the redesigned card
+   (the old rules assumed an 82px avatar inside a padded box)
+   ========================================================================== */
+.pcard .ssj-shockwave {
+  top: 22px;
+  left: 4px;
+  width: 72px;
+  height: 72px;
+}
+
+/* banner pops up in the empty slot between the header and the avatar */
+.pcard .ssj-toast {
+  top: 0;
+  animation: ssjToastCard 1.6s ease-out forwards;
+}
+@keyframes ssjToastCard {
+  0%   { opacity: 0; transform: translate(-50%, 6px) scale(0.85); }
+  20%  { opacity: 1; transform: translate(-50%, 0) scale(1.05); }
+  75%  { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -8px) scale(0.9); }
+}
+
+/* the role dot comes back while powered up */
+.pcard .role.ssj-role i { display: block; }

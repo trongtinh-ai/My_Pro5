@@ -1,0 +1,1606 @@
+/* ==========================================================================
+   GAMING & GALLERY SECTIONS
+   File nÃ y chá»©a toÃ n bá»™ CSS má»›i cho #gaming vÃ  #gallery.
+   TiÃªu Ä‘á» section dÃ¹ng láº¡i .sec-header-editorial + .sec-main-title tá»« dock.css
+   (giá»‘ng About / Contact) Ä‘á»ƒ Ä‘áº£m báº£o font, mÃ u, spacing thá»‘ng nháº¥t.
+   KHÃ”NG chá»‰nh sá»­a báº¥t ká»³ file CSS nÃ o khÃ¡c.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   HIDE: Download CV button
+   -------------------------------------------------------------------------- */
+a.btn[data-a="link:./assets/docs/cv.pdf"] {
+  display: none !important;
+}
+
+/* ==========================================================================
+   GAMING SECTION
+   ========================================================================== */
+
+/* --- Game card (glass style matching existing .glass) --- */
+.gaming-glass-card {
+  background: linear-gradient(145deg, rgba(10, 19, 40, 0.78) 0%, rgba(6, 12, 26, 0.84) 100%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 20px rgba(var(--accent-rgb), 0.03);
+  padding: 24px 28px;
+}
+
+/* Wrapper cho nhiá»u game xáº¿p dá»c */
+.gaming-cards-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-bottom: 28px;
+}
+
+/* Má»—i game block: card + shot strip */
+.gaming-game-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Card chá»©a My Setup á»Ÿ dÆ°á»›i cÃ¹ng */
+.gaming-specs-card {
+  margin-top: 0;
+}
+
+/* --- Two-column body: text left, cover image right --- */
+.gaming-card-body {
+  display: grid;
+  grid-template-columns: 1fr 40%;
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* Text column */
+.gaming-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  height: 100%;
+  justify-content: space-between;
+}
+
+/* Cover image column */
+.gaming-card-cover {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.gaming-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Mobile: stack â€” image on top, text below */
+@media (max-width: 700px) {
+  .gaming-card-body {
+    grid-template-columns: 1fr;
+  }
+
+  .gaming-card-cover {
+    order: -1; /* image goes above text */
+  }
+}
+
+.gaming-game-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gaming-game-title {
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.04em;
+}
+
+.gaming-game-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.12);
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+
+.gaming-game-desc {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-dim);
+}
+
+/* Meta pills — genre, platform, etc. */
+.gaming-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.gaming-meta-pill {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 6px;
+  padding: 6px 14px;
+}
+
+/* --- Specs grid --- */
+.gaming-specs-label {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  margin-top: 16px;
+}
+
+.gaming-specs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+}
+
+.gaming-specs-key {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  align-self: center;
+}
+
+.gaming-specs-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  align-self: center;
+}
+
+@media (max-width: 540px) {
+  .gaming-specs-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .gaming-specs-key {
+    padding-bottom: 2px;
+    border-bottom: none;
+  }
+
+  .gaming-specs-val {
+    padding-top: 2px;
+  }
+}
+
+/* --- Screenshot strip below the card (3 tiles, reuses .gg-* classes) --- */
+.gaming-shots-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.gaming-shots-label {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+@media (max-width: 700px) {
+  .gaming-shots-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   GALLERY SECTION
+   ========================================================================== */
+.gg-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 899px) {
+  .gg-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 539px) {
+  .gg-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Per-item wrapper (tile + caption stacked) */
+.gg-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Fixed aspect ratio box â€” layout never jumps */
+.gg-tile {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+}
+
+/* Still image */
+.gg-tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Video element (hidden until hover/tap activates it) */
+.gg-tile video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* JS adds .gg-playing when video should show */
+.gg-tile.gg-playing video {
+  opacity: 1;
+}
+
+.gg-tile.gg-playing img {
+  opacity: 0;
+}
+
+/* Placeholder tile (empty src) */
+.gg-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.gg-placeholder svg {
+  width: 28px;
+  height: 28px;
+  opacity: 0.5;
+}
+
+.gg-placeholder-text {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+/* Caption below tile */
+.gg-caption {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  padding: 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Chừa chỗ cho tile phóng to, không đổi kích thước/bố cục lưới */
+.gg-grid,
+.gaming-shots-strip {
+  padding: 24px;
+  margin: -24px;
+}
+
+/* Viền khi hover/focus (mọi chế độ, kể cả lite) */
+.gg-tile:hover,
+.gg-tile:focus-visible {
+  border-color: rgba(var(--accent-rgb), .6);
+}
+
+.gg-tile:focus-visible {
+  outline: 2px solid rgba(var(--accent-rgb), .8);
+  outline-offset: 3px;
+}
+
+/* Pop-out: chỉ khi có hover thật, không lite, không reduced-motion */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  html:not(.lite) .gg-tile {
+    transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .35s cubic-bezier(.2, .8, .2, 1);
+  }
+
+  html:not(.lite) .gg-tile img,
+  html:not(.lite) .gg-tile video {
+    transition: opacity .25s ease, transform .35s cubic-bezier(.2, .8, .2, 1);
+  }
+
+  html:not(.lite) .gg-tile:hover,
+  html:not(.lite) .gg-tile:focus-visible {
+    transform: scale(1.12);
+    z-index: 5;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .5), 0 0 24px rgba(var(--accent-rgb), .25);
+  }
+
+  html:not(.lite) .gg-tile:hover img,
+  html:not(.lite) .gg-tile:hover video,
+  html:not(.lite) .gg-tile:focus-visible img,
+  html:not(.lite) .gg-tile:focus-visible video {
+    transform: scale(1.08);
+  }
+
+  html:not(.lite) .gg-tile.gg-hot {
+    will-change: transform;
+  }
+
+  html:not(.lite) .gg-grid.gg-dim .gg-tile:not(.gg-hot),
+  html:not(.lite) .gaming-shots-strip.gg-dim .gg-tile:not(.gg-hot) {
+    opacity: .6;
+  }
+}
+
+/* 1 cột: tile gần chạm mép màn hình nên phóng nhẹ hơn để không tràn ngang */
+@media (max-width: 539px) {
+  html:not(.lite) .gg-tile:hover,
+  html:not(.lite) .gg-tile:focus-visible {
+    transform: scale(1.04);
+  }
+}
+
+/* ---- Viewer ---- */
+.gg-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(3, 6, 18, .8);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease, visibility 0s .2s;
+}
+
+.gg-viewer.open {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+html.lite .gg-viewer {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gg-viewer {
+    transition: none;
+  }
+}
+
+.gg-viewer [hidden] {
+  display: none !important;
+}
+
+.gg-v-fig {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.gg-v-fig img,
+.gg-v-fig video {
+  display: block;
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.gg-v-fig figcaption {
+  font-size: 14px;
+  letter-spacing: .04em;
+  color: var(--text-dim);
+}
+
+.gg-v-close,
+.gg-v-nav {
+  position: fixed;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(8, 16, 36, .7);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gg-v-close:hover,
+.gg-v-nav:hover,
+.gg-v-close:focus-visible,
+.gg-v-nav:focus-visible {
+  border-color: rgba(var(--accent-rgb), .6);
+}
+
+.gg-v-close { top: 20px; right: 20px; }
+.gg-v-prev { left: 20px; top: 50%; transform: translateY(-50%); }
+.gg-v-next { right: 20px; top: 50%; transform: translateY(-50%); }
+
+/* Lite / reduced-motion: no transitions, no animations */
+html.lite .gg-tile img,
+html.lite .gg-tile video,
+html.lite .gaming-glass-card {
+  transition: none !important;
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gg-tile img,
+  .gg-tile video,
+  .gaming-glass-card {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE TWEAKS
+   ========================================================================== */
+@media (max-width: 640px) {
+  .gaming-glass-card {
+    padding: 18px 18px;
+  }
+}
+
+/* ==========================================================================
+   GAMING HUB UPGRADE
+   Bộ lọc · icon game · ID + copy · View Details · hover glow · reveal
+   ========================================================================== */
+.gaming-game-block[hidden],
+.gg-details[hidden] {
+  display: none !important;
+}
+
+/* --- Filter pills --- */
+.gg-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 24px;
+}
+
+.gg-chip {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 999px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.gg-chip:hover {
+  color: var(--text);
+  border-color: rgba(var(--accent-rgb), .6);
+}
+
+.gg-chip.active {
+  color: #04101f;
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 18px rgba(var(--accent-rgb), .4);
+}
+
+.gg-chip:focus-visible {
+  outline: 2px solid rgba(var(--accent-rgb), .8);
+  outline-offset: 2px;
+}
+
+/* --- Card layout --- */
+.gg-card {
+  position: relative;
+}
+
+.gg-card .gaming-card-text {
+  justify-content: flex-start;
+  gap: 14px;
+}
+
+.gg-card .gaming-meta-row {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.gg-card .gaming-meta-pill {
+  font-size: 11px;
+  padding: 4px 12px;
+}
+
+.gg-card .gaming-game-header {
+  flex-wrap: wrap;
+}
+
+/* Icon game */
+.gg-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 12px;
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), .1);
+  border: 1px solid rgba(var(--accent-rgb), .3);
+}
+
+.gg-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Tên tài khoản + ID + nút copy */
+.gg-idrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.gg-idname {
+  font-weight: 600;
+}
+
+.gg-idsep {
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, .2);
+}
+
+.gg-idval {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.gg-copy {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  background: rgba(255, 255, 255, .06);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease;
+}
+
+.gg-copy svg {
+  width: 14px;
+  height: 14px;
+  grid-area: 1 / 1;
+}
+
+.gg-copy .i-ok {
+  display: none;
+}
+
+.gg-copy.copied .i-copy {
+  display: none;
+}
+
+.gg-copy.copied .i-ok {
+  display: block;
+}
+
+.gg-copy:hover,
+.gg-copy:focus-visible,
+.gg-copy.copied {
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), .6);
+}
+
+.gg-copy:focus-visible {
+  outline: 2px solid rgba(var(--accent-rgb), .8);
+  outline-offset: 2px;
+}
+
+/* View Details */
+.gg-actions {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, .07);
+}
+
+.gg-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.gg-more svg {
+  width: 16px;
+  height: 16px;
+}
+
+.gg-more:focus-visible {
+  outline: 2px solid rgba(var(--accent-rgb), .8);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.gg-open .gg-more svg {
+  transform: rotate(90deg);
+}
+
+.gg-details {
+  padding: 2px 0 0;
+}
+
+/* --- Hover & glow (chỉ khi có hover thật, không lite) --- */
+.gg-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(var(--accent-rgb), .16), transparent 60%);
+}
+
+html:not(.lite) .gg-card {
+  transition: border-color .3s ease, box-shadow .3s ease;
+}
+
+html:not(.lite) .gg-card::before {
+  transition: opacity .3s ease;
+}
+
+html:not(.lite) .gg-card .gaming-card-cover img {
+  transition: transform .5s cubic-bezier(.2, .8, .2, 1);
+}
+
+html:not(.lite) .gg-more svg,
+html:not(.lite) .gg-chip {
+  transition: transform .25s ease, color .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+@media (hover: hover) {
+  html:not(.lite) .gg-card:hover {
+    border-color: rgba(var(--accent-rgb), .6);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, .45),
+      0 0 28px rgba(var(--accent-rgb), .22),
+      inset 0 1px 0 rgba(255, 255, 255, .12);
+  }
+
+  html:not(.lite) .gg-card:hover::before {
+    opacity: 1;
+  }
+
+  html:not(.lite) .gg-card:hover .gaming-card-cover img {
+    transform: scale(1.06);
+  }
+
+  html:not(.lite) .gg-more:hover svg {
+    transform: translateX(4px);
+  }
+
+  html:not(.lite) .gg-open .gg-more:hover svg {
+    transform: rotate(90deg) translateX(4px);
+  }
+}
+
+/* --- Animation: mở chi tiết, lọc, xuất hiện khi cuộn --- */
+@keyframes ggSlideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes ggPop {
+  from { opacity: 0; transform: translateY(16px) scale(.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+html:not(.lite) .gg-details:not([hidden]) {
+  animation: ggSlideIn .4s cubic-bezier(.2, .8, .2, 1);
+}
+
+html:not(.lite) .gg-pop {
+  animation: ggPop .45s cubic-bezier(.2, .8, .2, 1);
+}
+
+html:not(.lite) .gg-rv {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+html:not(.lite) .gg-rv.gg-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity .6s ease var(--d, 0ms),
+    transform .6s cubic-bezier(.2, .8, .2, 1) var(--d, 0ms);
+}
+
+/* --- Responsive --- */
+@media (max-width: 700px) {
+  .gg-filter {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-right: -4px;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+  }
+
+  .gg-filter::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gg-chip {
+    flex: none;
+  }
+}
+
+/* Chừa chỗ cho dock phía dưới, không che card cuối */
+#gaming > :last-child {
+  margin-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+}
+
+/* ==========================================================================
+   GAMING HUB — giao diện card kiểu sci-fi (ảnh hòa vào card, viền neon)
+   ========================================================================== */
+.gg-filter {
+  margin-top: 20px;
+}
+
+.gaming-cards-wrap {
+  gap: 18px;
+}
+
+.gaming-game-block {
+  gap: 12px;
+}
+
+.gg-card.gaming-glass-card {
+  padding: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(110deg, rgba(8, 20, 46, .92) 0%, rgba(7, 14, 32, .9) 55%, rgba(6, 12, 28, .8) 100%);
+  border: 1px solid rgba(var(--accent-rgb), .28);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45),
+    inset 0 0 0 1px rgba(var(--accent-rgb), .06),
+    inset 0 0 34px rgba(var(--accent-rgb), .05);
+}
+
+/* Thân card: text bên trái, ảnh game hòa dần vào bên phải */
+.gg-card .gaming-card-body {
+  display: block;
+  position: relative;
+  min-height: 168px;
+}
+
+.gg-card .gaming-card-text {
+  position: relative;
+  z-index: 2;
+  width: 58%;
+  height: auto;
+  min-height: 168px;
+  padding: 22px 26px;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+.gg-card .gaming-card-cover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 52%;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  cursor: pointer;
+  z-index: 1;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 42%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 42%);
+}
+
+.gg-card .gaming-card-cover img {
+  filter: saturate(1.1) brightness(.95);
+}
+
+.gg-card .gaming-card-cover:focus-visible {
+  outline: 2px solid rgba(var(--accent-rgb), .8);
+  outline-offset: -4px;
+}
+
+/* Header: icon + tên + badge */
+.gg-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  font-size: 22px;
+  background: linear-gradient(145deg, rgba(var(--accent-rgb), .22), rgba(var(--accent-rgb), .06));
+  border: 1px solid rgba(var(--accent-rgb), .45);
+  box-shadow: 0 0 16px rgba(var(--accent-rgb), .25), inset 0 0 12px rgba(var(--accent-rgb), .12);
+}
+
+.gg-card .gaming-game-header {
+  gap: 14px;
+}
+
+.gg-card .gaming-game-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+/* Tag: pill nhỏ, viền xanh tối */
+.gg-card .gaming-meta-pill {
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  padding: 4px 11px;
+  border-radius: 6px;
+  color: #9fd4ff;
+  background: rgba(var(--accent-rgb), .1);
+  border: 1px solid rgba(var(--accent-rgb), .25);
+}
+
+.gg-idrow {
+  font-size: 12.5px;
+}
+
+.gg-actions {
+  margin-top: auto;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.gg-more {
+  font-size: 13px;
+  letter-spacing: .03em;
+}
+
+/* Hover: viền sáng + glow, ảnh zoom nhẹ */
+@media (hover: hover) {
+  html:not(.lite) .gg-card.gaming-glass-card:hover {
+    border-color: rgba(var(--accent-rgb), .85);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, .5),
+      0 0 0 1px rgba(var(--accent-rgb), .35),
+      0 0 34px rgba(var(--accent-rgb), .3),
+      inset 0 0 40px rgba(var(--accent-rgb), .08);
+  }
+}
+
+/* Mobile: ảnh lên trên thành banner, mờ dần xuống dưới */
+@media (max-width: 700px) {
+  .gg-card .gaming-card-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .gg-card .gaming-card-cover {
+    position: relative;
+    order: -1;
+    width: 100%;
+    height: 150px;
+    -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 40%, transparent 100%);
+  }
+
+  .gg-card .gaming-card-text {
+    width: 100%;
+    min-height: 0;
+    padding: 0 20px 20px;
+    margin-top: -34px;
+  }
+}
+
+/* Tên tài khoản một dòng, ID xuống dòng dưới (hỗ trợ "\n" trong desc) */
+.gg-idname {
+  flex-basis: 100%;
+  white-space: pre-line;
+}
+
+.gg-idsep {
+  display: none;
+}
+
+.gg-note {
+  font-weight: 500;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   GALLERY — EMPTY STATE (khi chưa có ảnh)
+   ========================================================================== */
+.gg-empty {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 52px 32px;
+  border-radius: 20px;
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(62, 75, 98, .58) 0%, rgba(30, 43, 68, .66) 100%);
+  -webkit-backdrop-filter: blur(22px) saturate(125%);
+  backdrop-filter: blur(22px) saturate(125%);
+  border: 1px solid rgba(255, 255, 255, .12);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(255, 255, 255, .1);
+}
+
+/* Khung nét đứt bên trong: chỗ trống chờ ảnh */
+.gg-empty::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px dashed rgba(255, 255, 255, .3);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.gg-empty-icon {
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, .6);
+}
+
+.gg-empty-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.gg-empty-title {
+  margin: 14px 0 0;
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--text);
+}
+
+.gg-empty-text {
+  margin: 6px 0 0;
+  max-width: 440px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+.gg-empty-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 16px;
+  border-radius: 14px;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), .12);
+  border: 1px solid rgba(var(--accent-rgb), .16);
+}
+
+.gg-empty-box svg {
+  width: 22px;
+  height: 22px;
+}
+
+.gg-empty-box strong {
+  font-size: 16px;
+  font-weight: 700;
+  color: #cfeaff;
+}
+
+.gg-empty-box span {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.gg-empty-foot {
+  margin-top: 18px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Hộp lồng và nhãn "Personal archive" không còn dùng (gộp vào một khung) */
+.gg-empty-box,
+.gg-empty-foot {
+  display: none;
+}
+
+@media (max-width: 540px) {
+  .gg-empty {
+    padding: 40px 20px;
+  }
+
+  .gg-empty::before {
+    inset: 10px;
+  }
+
+  .gg-empty-title {
+    font-size: 17px;
+  }
+}
+
+/* ==========================================================================
+   GAMING — GIAO DIỆN KÍNH MỜ (đồng bộ với card Profile)
+   Card dọc: cover → nhãn → header → thông tin → chi tiết → screenshots.
+   Game đầu tiên đang hiện là card lớn (full hàng), các game còn lại 2 cột.
+   Hiệu ứng: hiện dần khi cuộn, hover nhấc card, cover zoom nhẹ, copy báo
+   "Copied". Tất cả tắt ở html.lite và prefers-reduced-motion.
+   ========================================================================== */
+.gaming-game-block[hidden],
+.gx-block[hidden] {
+  display: none !important;
+}
+
+/* --- Bộ lọc: thanh segmented kính mờ --- */
+.gx-filter {
+  display: inline-flex;
+  align-self: flex-start;
+  width: fit-content;
+  gap: 4px;
+  max-width: 100%;
+  margin: 20px 0 24px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(40, 52, 76, .5);
+  border: 1px solid rgba(255, 255, 255, .1);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.gx-chip {
+  flex: none;
+  font: 600 11.5px var(--font-head);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, .6);
+  background: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: color .2s ease, background .2s ease;
+}
+
+.gx-chip:hover {
+  color: #fff;
+}
+
+.gx-chip.active {
+  color: #fff;
+  background: rgba(255, 255, 255, .16);
+}
+
+.gx-chip:focus-visible {
+  outline: 2px solid rgba(var(--accent-rgb), .8);
+  outline-offset: 2px;
+}
+
+/* --- Lưới: card lớn full hàng, còn lại 2 cột --- */
+.gx-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin: 0 0 28px;
+}
+
+.gx-block.gx-feature {
+  grid-column: 1 / -1;
+}
+
+.gx-block > .gx-card {
+  flex: 1 1 auto;
+}
+
+/* --- Card kính mờ --- */
+.gx-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--text);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(62, 75, 98, .58) 0%, rgba(30, 43, 68, .66) 100%);
+  -webkit-backdrop-filter: blur(22px) saturate(125%);
+  backdrop-filter: blur(22px) saturate(125%);
+  border: 1px solid rgba(255, 255, 255, .12);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(255, 255, 255, .1);
+}
+
+.gx-sec {
+  padding: 14px 20px;
+}
+
+.gx-sec + .gx-sec {
+  border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+/* Cover: bo theo card, hơi giảm bão hòa */
+.gx-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.gx-cover {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  cursor: pointer;
+  background: rgba(255, 255, 255, .04);
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+
+/* Card lớn (desktop): cover bên trái giữ nguyên tỉ lệ ảnh, thông tin bên phải */
+@media (min-width: 701px) {
+  .gx-feature .gx-card {
+    flex-direction: row;
+  }
+
+  .gx-feature .gx-cover {
+    flex: 0 0 60%;
+    border-bottom: 0;
+    border-right: 1px solid rgba(255, 255, 255, .08);
+  }
+}
+
+.gx-cover img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(.88) brightness(.92);
+}
+
+.gx-cover:focus-visible {
+  outline: 2px solid rgba(var(--accent-rgb), .8);
+  outline-offset: -4px;
+}
+
+.gx-state {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  font: 600 10.5px var(--font-head);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .5);
+}
+
+.gx-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Header: icon tròn + tên + tag dạng chữ */
+.gx-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.gx-icon {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 14px;
+  font: 700 20px var(--font-head);
+  color: #fff;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .16);
+}
+
+.gx-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.gx-head-text {
+  min-width: 0;
+}
+
+.gx-title {
+  font: 700 19px/1.25 var(--font-head);
+  letter-spacing: .01em;
+  color: #fff;
+  overflow-wrap: anywhere;
+}
+
+.gx-tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 3px;
+  font: 500 11.5px var(--font-head);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .55);
+}
+
+.gx-tags span + span::before {
+  content: "·";
+  margin: 0 8px;
+}
+
+/* Thông tin: tên trong game | Player ID + nút copy */
+.gx-info {
+  flex: 1 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 14px 18px;
+}
+
+.gx-info.one {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.gx-lbl {
+  margin-bottom: 4px;
+  font: 600 10px var(--font-head);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .42);
+}
+
+.gx-name {
+  font: 600 14px/1.45 var(--font-head);
+  color: #fff;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.gx-idbox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.gx-idval {
+  min-width: 0;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-dim);
+  overflow-wrap: anywhere;
+}
+
+.gx-note {
+  grid-column: 1 / -1;
+  font: 500 13px/1.5 var(--font-head);
+  color: var(--text-dim);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.gx-copy {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background: rgba(255, 255, 255, .07);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, background .2s ease;
+}
+
+.gx-copy svg {
+  width: 14px;
+  height: 14px;
+  grid-area: 1 / 1;
+}
+
+.gx-copy .i-ok,
+.gx-copy.copied .i-copy {
+  display: none;
+}
+
+.gx-copy.copied .i-ok {
+  display: block;
+}
+
+.gx-copy:hover,
+.gx-copy:focus-visible,
+.gx-copy.copied {
+  color: #fff;
+  border-color: rgba(255, 255, 255, .4);
+  background: rgba(255, 255, 255, .14);
+}
+
+.gx-copy:focus-visible {
+  outline: 2px solid rgba(var(--accent-rgb), .8);
+  outline-offset: 2px;
+}
+
+.gx-copy::after {
+  content: "Copied";
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font: 600 10.5px var(--font-head);
+  letter-spacing: .04em;
+  color: #fff;
+  background: rgba(10, 16, 30, .92);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(2px);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.gx-copy.copied::after {
+  opacity: 1;
+  transform: none;
+}
+
+/* Screenshots: thumbnail nhỏ, đều nhau, nằm trong card */
+.gx-shots {
+  padding-top: 14px;
+  padding-bottom: 18px;
+}
+
+.gx-card .gaming-shots-strip {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+}
+
+.gx-card .gg-item {
+  min-width: 0;
+}
+
+.gx-card .gg-tile {
+  border-radius: 10px;
+  border-color: rgba(255, 255, 255, .12);
+}
+
+.gx-card .gg-tile:hover,
+.gx-card .gg-tile:focus-visible {
+  border-color: rgba(255, 255, 255, .4);
+}
+
+.gx-card .gg-caption {
+  font-size: 11px;
+  color: rgba(255, 255, 255, .55);
+}
+
+/* My Setup: cùng chất liệu kính mờ */
+.gaming-glass-card.gaming-specs-card {
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(62, 75, 98, .58) 0%, rgba(30, 43, 68, .66) 100%);
+  border: 1px solid rgba(255, 255, 255, .12);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(255, 255, 255, .1);
+}
+
+/* --- Hiệu ứng (chỉ khi không lite) --- */
+@keyframes gxPop {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes gxPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .35; }
+}
+
+html:not(.lite) .gx-rv {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+html:not(.lite) .gx-rv.gx-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity .5s ease var(--d, 0ms),
+    transform .5s cubic-bezier(.2, .8, .2, 1) var(--d, 0ms);
+}
+
+html:not(.lite) .gx-pop {
+  animation: gxPop .25s ease-out;
+}
+
+html:not(.lite) .gx-dot {
+  animation: gxPulse 3.2s ease-in-out infinite;
+}
+
+html:not(.lite) .gx-card {
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+html:not(.lite) .gx-cover img {
+  transition: transform .5s cubic-bezier(.2, .8, .2, 1), filter .4s ease;
+}
+
+@media (hover: hover) {
+  html:not(.lite) .gx-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, .26);
+    box-shadow: 0 22px 56px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(255, 255, 255, .14);
+  }
+
+  html:not(.lite) .gx-card:hover .gx-cover img {
+    transform: scale(1.03);
+    filter: saturate(1) brightness(1);
+  }
+
+}
+
+/* Thumbnail trong card: không phóng cả khung (card đã overflow hidden), chỉ zoom ảnh nhẹ */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  html:not(.lite) .gx-card .gg-tile:hover,
+  html:not(.lite) .gx-card .gg-tile:focus-visible {
+    transform: none;
+    box-shadow: none;
+  }
+
+  html:not(.lite) .gx-card .gg-tile:hover img,
+  html:not(.lite) .gx-card .gg-tile:hover video,
+  html:not(.lite) .gx-card .gg-tile:focus-visible img,
+  html:not(.lite) .gx-card .gg-tile:focus-visible video {
+    transform: scale(1.05);
+  }
+}
+
+html.lite .gx-card,
+html.lite .gx-cover img,
+html.lite .gx-chip,
+html.lite .gx-copy,
+html.lite .gx-copy::after {
+  transition: none !important;
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gx-rv,
+  .gx-pop,
+  .gx-dot,
+  .gx-card,
+  .gx-cover img,
+  .gx-chip,
+  .gx-copy,
+  .gx-copy::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* --- Responsive --- */
+@media (max-width: 700px) {
+  .gx-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .gx-sec {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .gx-filter {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .gx-filter::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .gx-info {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

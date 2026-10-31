@@ -1,0 +1,130 @@
+/* ============================================================
+   contact.css — Contact section overrides & new styles
+   Loaded after dock.css; overrides layout + interactions only.
+   All colors via CSS variables except the green status dot
+   (hardcoded in dock.css, left unchanged here).
+   ============================================================ */
+
+/* ---- Equal-height two-column layout ---- */
+.contact-hub-layout {
+  align-items: stretch;   /* both columns same height */
+}
+
+/* Right column: fill height, cards stretch evenly */
+.contact-social-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.contact-social-grid .contact-channel-item {
+  flex: 1;               /* cards grow to fill available height equally */
+}
+
+/* ---- Hover: lift 2px + arrow moves 3px up-right ---- */
+.contact-channel-item:hover {
+  transform: translateY(-2px);   /* lift (replaces old translateX) */
+  border-color: rgba(var(--accent-rgb), 0.35);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.contact-channel-item:hover .channel-arrow {
+  color: var(--accent);
+  transform: translate(3px, -3px);   /* up-right */
+}
+
+/* ---- Discord copy-handle button ---- */
+.channel-copy-discord {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  /* sit between channel-text and channel-arrow */
+  margin-right: 6px;
+}
+
+.channel-copy-discord svg.i {
+  width: 13px;
+  height: 13px;
+}
+
+.channel-copy-discord:hover {
+  background: rgba(var(--accent-rgb), 0.14);
+  border-color: rgba(var(--accent-rgb), 0.35);
+  color: var(--accent);
+}
+
+.channel-copy-discord.done {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+/* ---- Focus rings (keyboard a11y) ---- */
+.contact-channel-item:focus-visible,
+.hero-copy-btn:focus-visible,
+.hero-send-btn:focus-visible,
+.channel-copy-discord:focus-visible,
+.hero-email-val:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---- Footer copyright line ---- */
+.contact-footer-copy {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 32px;
+  letter-spacing: 0.04em;
+}
+
+/* ---- Mobile: single column ≤700px ---- */
+@media (max-width: 700px) {
+  .contact-hub-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* Left card first (default DOM order, no change needed) */
+
+  .contact-social-grid .contact-channel-item {
+    flex: unset;           /* don't stretch on mobile */
+  }
+}
+
+/* ---- Reduced motion + lite mode: disable all transitions & pulse ---- */
+@media (prefers-reduced-motion: reduce) {
+  .contact-channel-item,
+  .contact-channel-item:hover,
+  .contact-channel-item:hover .channel-arrow,
+  .channel-copy-discord,
+  .hero-copy-btn,
+  .hero-send-btn,
+  .status-radar-dot::after {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+html.lite .contact-channel-item,
+html.lite .contact-channel-item:hover,
+html.lite .contact-channel-item:hover .channel-arrow,
+html.lite .channel-copy-discord,
+html.lite .hero-copy-btn,
+html.lite .hero-send-btn,
+html.lite .status-radar-dot::after {
+  transition: none !important;
+  animation: none !important;
+  transform: none !important;
+}

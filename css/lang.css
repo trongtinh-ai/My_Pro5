@@ -1,0 +1,45 @@
+/* Nút đổi ngôn ngữ EN | VI (js/main.js: initLang). Dùng biến sẵn có, không hiệu ứng. */
+.lang-sw {
+  position: fixed;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  right: 16px;
+  z-index: 1000;
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--card, rgba(15, 25, 44, 0.72));
+  border: 1px solid var(--line-strong, rgba(111, 179, 224, 0.45));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.lang-sw button {
+  appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-dim, #cbd5e1);
+  font: 700 12px/1 var(--font-body, 'Montserrat', sans-serif);
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+
+.lang-sw button:hover { color: var(--text, #e8eef6); }
+
+.lang-sw button.on {
+  background: var(--accent, #6fb3e0);
+  color: #04121f;
+  cursor: default;
+}
+
+.lang-sw button:focus-visible {
+  outline: 2px solid var(--accent, #6fb3e0);
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .lang-sw { top: calc(10px + env(safe-area-inset-top, 0px)); right: 10px; }
+  .lang-sw button { padding: 5px 10px; font-size: 11px; }
+}

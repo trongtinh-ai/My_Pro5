@@ -1,0 +1,194 @@
+/* ==========================================================
+   levelup.css — Bước 4 (bản nâng cấp): mỗi cấp Saiyan một "tính cách"
+   Áp dụng: 4 hàng menu (.row), khối trích dẫn (.hq), 2 nút (.btn), tiêu đề (.title)
+   - SS1  : glow "thở" chậm, dải sáng chảy dọc viền trái trích dẫn (chậm)
+   - SS2  : sáng hơn, nhấp nháy kiểu điện giật, dải chảy nhanh hơn
+   - God  : 2 tia sáng (đỏ) chạy ngược chiều quanh viền, dải chảy nhanh nhất
+   - Lúc vừa lên cấp: các phần bật sáng lần lượt (menu → trích dẫn → nút)
+   Load SAU glow.css, reveal.css, social.css. Không cần JS.
+   ========================================================== */
+
+@property --ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+
+/* ---------- keyframes ---------- */
+@keyframes ssjEdge { to { --ang: 360deg; } }
+
+@keyframes ssjFlow {            /* dải sáng chảy từ trên xuống ở viền trái .hq */
+  from { background-position: 0 0%; }
+  to   { background-position: 0 100%; }
+}
+@keyframes ssjBreath {          /* SS1: thở */
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .5; }
+}
+@keyframes ssjFlicker {         /* SS2: điện giật (ngắt quãng, không đều) */
+  0%, 100% { opacity: 1; }
+  7%  { opacity: .55; }
+  11% { opacity: 1; }
+  38% { opacity: .9; }
+  42% { opacity: .45; }
+  46% { opacity: 1; }
+  71% { opacity: .85; }
+  74% { opacity: 1; }
+}
+/* bật sáng một lần khi vừa lên cấp (tên khác nhau từng cấp để chạy lại khi đổi cấp) */
+@keyframes ssjFlashA {
+  0%   { opacity: 0; }
+  30%  { opacity: 1; box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), .9), inset 0 0 22px rgba(var(--accent-rgb), .75); }
+  100% { opacity: 1; }
+}
+@keyframes ssjFlashB {
+  0%   { opacity: 0; }
+  30%  { opacity: 1; box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 1), inset 0 0 34px rgba(var(--accent-rgb), .95); }
+  100% { opacity: 1; }
+}
+@keyframes ssjFlashC {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* ---------- thứ tự bật sáng lúc lên cấp ---------- */
+.pcard button.row:nth-of-type(1) { --d: 0s;   --ph: 0s; }
+.pcard button.row:nth-of-type(2) { --d: .08s; --ph: -.7s; }
+.pcard button.row:nth-of-type(3) { --d: .16s; --ph: -1.4s; }
+.pcard button.row:nth-of-type(4) { --d: .24s; --ph: -2.1s; }
+.hq                              { --d: .32s; --ph: -.35s; --edge-t: 3.4s; }
+.btn:nth-child(1)                { --d: .40s; --ph: -1s;   --edge-t: 3.2s; }
+.btn:nth-child(2)                { --d: .48s; --ph: -2s;   --edge-t: 3.2s; }
+
+/* ==========================================================
+   LỚP NỀN CHUNG (mọi cấp): ::before = lớp sáng phía sau chữ
+   ========================================================== */
+html[class*="ssj-"] .pcard button.row::before,
+html[class*="ssj-"] .hq::before,
+html[class*="ssj-"] .btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;                       /* nằm sau chữ (cha đã isolation:isolate ở glow.css) */
+  border-radius: inherit;
+  pointer-events: none;
+  background: rgba(var(--accent-rgb), .07);
+  box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), .3),
+              inset 0 0 0 0 rgba(var(--accent-rgb), 0);
+}
+
+/* màu icon / chữ phụ theo cấp (không đụng vào hover của glow.css) */
+html[class*="ssj-"] .pcard .row .ic,
+html[class*="ssj-"] .pcard .row .go { color: var(--accent); }
+html[class*="ssj-"] .pcard .row small { color: color-mix(in srgb, var(--accent) 40%, #cbd5e1); }
+html[class*="ssj-"] .hq:not(:hover) { text-shadow: 0 0 12px rgba(var(--accent-rgb), .35); }
+
+/* tiêu đề: glow bằng drop-shadow (text-shadow sẽ lem nếu chữ dùng gradient) */
+html[class*="ssj-"] .title {
+  filter: drop-shadow(0 0 12px rgba(var(--accent-rgb), .4));
+  transition: filter .6s;
+}
+/* 2 nút: viền theo cấp */
+html[class*="ssj-"] .btn:not(:hover) { border-color: rgba(var(--accent-rgb), .45); }
+
+/* dải sáng chảy dọc viền trái của khối trích dẫn */
+html[class*="ssj-"] .hq {
+  background-image: linear-gradient(180deg, transparent, rgb(var(--accent-rgb)), #fff, transparent);
+  background-size: 3px 45%;
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  background-position: 0 0%;
+  animation: ssjFlow var(--flow-t, 3.2s) linear infinite;
+}
+
+/* ==========================================================
+   SS1 — vàng, thở chậm
+   ========================================================== */
+html.ssj-1 { --flow-t: 3.2s; }
+html.ssj-1 .pcard button.row::before,
+html.ssj-1 .hq::before,
+html.ssj-1 .btn::before {
+  animation: ssjFlashA .9s ease-out var(--d, 0s) backwards,
+             ssjBreath 3.6s ease-in-out calc(.9s + var(--d, 0s)) infinite;
+}
+
+/* ==========================================================
+   SS2 — vàng sáng, điện giật
+   ========================================================== */
+html.ssj-2 { --flow-t: 2.2s; }
+html.ssj-2 .pcard button.row::before,
+html.ssj-2 .hq::before,
+html.ssj-2 .btn::before {
+  background: rgba(var(--accent-rgb), .11);
+  box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), .42),
+              inset 0 0 0 0 rgba(var(--accent-rgb), 0);
+  animation: ssjFlashB 1s ease-out var(--d, 0s) backwards,
+             ssjFlicker 2.6s linear calc(1s + var(--d, 0s)) infinite;
+}
+html.ssj-2 .hq:not(:hover) { text-shadow: 0 0 16px rgba(var(--accent-rgb), .5); }
+html.ssj-2 .title { filter: drop-shadow(0 0 16px rgba(var(--accent-rgb), .55)); }
+
+/* ==========================================================
+   GOD (đỏ) — 2 tia sáng chạy ngược chiều quanh viền
+   ========================================================== */
+html.ssj-3 { --flow-t: 1.5s; }
+html.ssj-3 .pcard button.row::before,
+html.ssj-3 .hq::before,
+html.ssj-3 .btn::before {
+  z-index: 1;                         /* chỉ là viền 1px nên đặt phía trên cũng không che chữ */
+  padding: 1px;
+  box-shadow: none;
+  background:
+    conic-gradient(from var(--ang),
+      transparent 0 68%, rgba(var(--accent-rgb), .95) 86%, #fff 93%, transparent 100%),
+    conic-gradient(from calc(180deg - var(--ang)),
+      transparent 0 80%, rgba(var(--accent-rgb), .6) 92%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: ssjFlashC .7s ease-out var(--d, 0s) backwards,
+             ssjEdge var(--edge-t, 2.8s) linear var(--ph, 0s) infinite;
+}
+html.ssj-3 .hq:not(:hover) { text-shadow: 0 0 18px rgba(var(--accent-rgb), .55); }
+html.ssj-3 .title { filter: drop-shadow(0 0 18px rgba(var(--accent-rgb), .6)); }
+
+/* ==========================================================
+   Tắt chuyển động: giữ màu, bỏ animation
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html[class*="ssj-"] .pcard button.row::before,
+  html[class*="ssj-"] .hq::before,
+  html[class*="ssj-"] .btn::before { animation: none; }
+  html.ssj-3 .pcard button.row::before,
+  html.ssj-3 .hq::before,
+  html.ssj-3 .btn::before { display: none; }
+  html[class*="ssj-"] .hq { animation: none; background-image: none; }
+}
+html.lite[class*="ssj-"] .pcard button.row::before,
+html.lite[class*="ssj-"] .hq::before,
+html.lite[class*="ssj-"] .btn::before { animation: none; }
+html.lite.ssj-3 .pcard button.row::before,
+html.lite.ssj-3 .hq::before,
+html.lite.ssj-3 .btn::before { display: none; }
+html.lite[class*="ssj-"] .hq { animation: none; background-image: none; }
+
+/* ==========================================================
+   Card profile dễ đọc hơn khi power up (chống bị "chìm" do nền sáng lên)
+   Chỉ chạy khi đang ở SS1 / SS2 / God. Power down thì về như cũ.
+   Chỉnh độ tối: đổi số .78 (to hơn = tối hơn).
+   ========================================================== */
+html[class*="ssj-"] .pcard.glass {
+  background-color: rgba(8, 14, 28, .78);
+  -webkit-backdrop-filter: blur(18px);
+          backdrop-filter: blur(18px);
+}
+
+/* bóng tối nhẹ phía sau chữ trong card */
+html[class*="ssj-"] .pcard .phead,
+html[class*="ssj-"] .pcard .who,
+html[class*="ssj-"] .pcard .two {
+  text-shadow: 0 1px 6px rgba(0, 0, 0, .7);
+}
+
+/* chữ xám nhạt sáng lên một nấc */
+html[class*="ssj-"] .pcard .phead > span,
+html[class*="ssj-"] .pcard .hd,
+html[class*="ssj-"] .pcard .mini small {
+  color: #cdd6e3;
+}

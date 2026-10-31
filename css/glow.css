@@ -1,0 +1,103 @@
+/* ==========================================================
+   glow.css — Bước 1: hover sáng + vệt sáng xéo chạy qua
+   Load SAU saiyan.css. Không sửa file cũ.
+   Áp dụng: .row (4 hàng menu), .soc a (icon social),
+            .hq (khối trích dẫn), .btn (View Projects / Download CV)
+   ========================================================== */
+
+/* Màu: lấy từ --accent / --accent-rgb của saiyan.css,
+   nên tự đổi theo cấp Saiyan (vàng → vàng sáng → xanh Blue). */
+
+/* >>> TỐC ĐỘ VỆT SÁNG QUÉT QUA: sửa số này (to hơn = chậm hơn) <<<
+   0.75s = nhanh (bản cũ) · 1.3s = vừa (mặc định) · 1.8s = chậm */
+:root { --sweep-time: 1.3s; }
+
+/* ---------- nền chung ---------- */
+.pcard .row,
+.pcard .soc a,
+.hq,
+.btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: background-color .25s, border-color .25s,
+              box-shadow .25s, color .25s, transform .25s;
+}
+
+/* ---------- vệt sáng xéo (nằm ngoài khung khi chưa hover) ---------- */
+.pcard .row::after,
+.pcard .soc a::after,
+.hq::after,
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(var(--accent-rgb, 111, 179, 224), 0.4) 50%,
+    transparent 62%
+  );
+  transform: translateX(-100%);
+  transition: none;               /* rời chuột thì về chỗ cũ ngay, không quét ngược */
+}
+
+/* ---------- hover (chỉ thiết bị có chuột) ---------- */
+@media (hover: hover) {
+
+  .pcard .row:hover::after,
+  .pcard .soc a:hover::after,
+  .hq:hover::after,
+  .btn:hover::after {
+    transform: translateX(100%);
+    transition: transform var(--sweep-time, 1.3s) cubic-bezier(.4, 0, .2, 1);
+  }
+
+  /* hàng menu */
+  .pcard .row:hover {
+    background-color: rgba(var(--accent-rgb, 111, 179, 224), 0.12);
+    box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb, 111, 179, 224), 0.45),
+                0 0 18px rgba(var(--accent-rgb, 111, 179, 224), 0.22);
+  }
+  .pcard .row:hover b {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(var(--accent-rgb, 111, 179, 224), 0.7);
+  }
+  .pcard .row:hover small { color: color-mix(in srgb, var(--accent, #6fb3e0) 55%, #fff); }
+  .pcard .row:hover .ic,
+  .pcard .row:hover .go { color: var(--accent, #6fb3e0); }
+
+  /* icon social */
+  .pcard .soc a:hover {
+    color: #fff;
+    background-color: rgba(var(--accent-rgb, 111, 179, 224), 0.22);
+    box-shadow: 0 0 0 1px rgba(var(--accent-rgb, 111, 179, 224), 0.6),
+                0 0 16px rgba(var(--accent-rgb, 111, 179, 224), 0.45);
+  }
+
+  /* khối trích dẫn */
+  .hq:hover {
+    background-color: rgba(var(--accent-rgb, 111, 179, 224), 0.08);
+    box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb, 111, 179, 224), 0.3),
+                0 0 22px rgba(var(--accent-rgb, 111, 179, 224), 0.18);
+    text-shadow: 0 0 10px rgba(var(--accent-rgb, 111, 179, 224), 0.45);
+  }
+
+  /* 2 nút */
+  .btn:hover {
+    border-color: rgba(var(--accent-rgb, 111, 179, 224), 0.7);
+    box-shadow: 0 0 0 1px rgba(var(--accent-rgb, 111, 179, 224), 0.55),
+                0 0 22px rgba(var(--accent-rgb, 111, 179, 224), 0.4);
+  }
+}
+
+/* ---------- tắt chuyển động ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .pcard .row::after, .pcard .soc a::after, .hq::after, .btn::after { display: none; }
+}
+html.lite .pcard .row::after,
+html.lite .pcard .soc a::after,
+html.lite .hq::after,
+html.lite .btn::after { display: none; }

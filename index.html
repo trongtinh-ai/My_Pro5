@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tran Trong Tinh | Pro5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="preload" as="image" href="assets/images/bg.jpg">
+  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/dock.css?v=17">
+  <link rel="stylesheet" href="css/extras.css">
+  <link rel="stylesheet" href="css/volume.css">
+  <link rel="stylesheet" href="css/card.css?v=4">
+  <link rel="stylesheet" href="css/saiyan.css?v=22">
+  <link rel="stylesheet" href="css/glow.css">
+  <link rel="stylesheet" href="css/social.css">
+  <link rel="stylesheet" href="css/levelup.css">
+  <link rel="stylesheet" href="css/lang.css">
+  <link rel="stylesheet" href="css/gaming-gallery.css?v=14">
+  <link rel="stylesheet" href="css/contact.css?v=1">
+  <noscript>
+    <style>
+      #boot {
+        display: none
+      }
+    </style>
+  </noscript>
+  <script>
+    (function () {
+      var l = null; try { l = localStorage.getItem('lang'); } catch (e) { }
+      if (l !== 'vi' && l !== 'en') {
+        var n = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
+        l = /^vi(-|$)/i.test(n) ? 'vi' : 'en';
+      }
+      window.LANG = l;
+      document.documentElement.lang = l;
+    })();
+  </script>
+  <script>
+    (function () {
+      var s = null; try { s = localStorage.getItem('fxOff'); } catch (e) { }
+      var rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var touch = matchMedia('(pointer: coarse)').matches;
+      var lite = rm || (s === null ? touch : s === '1');
+      window.FX = { lite: lite };
+      if (lite) document.documentElement.classList.add('lite');
+    })();
+  </script>
+</head>
+
+<body>
+  <!-- HUD boot overlay (click to skip) -->
+  <div id="boot" aria-hidden="true">
+    <div class="boot-box">
+      <pre id="bootlog"></pre>
+      <div class="boot-bar"><i id="bootbar"></i></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var b = document.getElementById('boot');
+      if (window.FX && window.FX.lite) { b.remove(); return; }
+      var root = document.documentElement, done = false;
+      root.classList.add('booting');
+      function finish() {
+        if (done) return; done = true;
+        root.classList.remove('booting');
+        b.classList.add('out');
+        setTimeout(function () { b.remove(); }, 650);
+      }
+      b.addEventListener('click', finish);
+      addEventListener('keydown', finish, { once: true });
+      setTimeout(finish, 5000);
+      var lines = ['> INITIALIZING SYSTEM...', '> LOADING NEURAL CORE... OK', '> SYNCING PROFILE DATA... OK', '> ACCESS GRANTED'];
+      var log = document.getElementById('bootlog'), text = '', li = 0, ci = 0;
+      setTimeout(function () { document.getElementById('bootbar').style.width = '100%'; }, 60);
+      (function step() {
+        if (done) return;
+        if (li >= lines.length) { b.classList.add('ok'); setTimeout(finish, 450); return; }
+        var L = lines[li];
+        if (ci < L.length) { ci++; log.textContent = text + L.slice(0, ci); setTimeout(step, 15); }
+        else { text += L + '\n'; li++; ci = 0; setTimeout(step, 120); }
+      })();
+    })();
+  </script>
+
+  <!-- Fullscreen Artwork Background -->
+  <div class="bg" id="bg">
+    <div class="bg-img"></div>
+    <video class="bg-vid" id="bgv" autoplay muted loop playsinline webkit-playsinline disablePictureInPicture
+      preload="auto" poster="assets/images/bg.jpg" src="assets/video/bg.mp4"></video>
+  </div>
+  <div class="shade"></div>
+
+  <!-- Floating Background Music Player -->
+  <button id="music-btn" class="music-toggle" aria-label="Toggle background music" aria-pressed="false"
+    title="Play background music">
+    <span class="music-icon-wrap">
+      <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+        <line x1="23" y1="9" x2="17" y2="15" />
+        <line x1="17" y1="9" x2="23" y2="15" />
+      </svg>
+    </span>
+    <span class="music-label">BGM</span>
+    <span class="sound-bars" aria-hidden="true">
+      <span class="sound-bar"></span>
+      <span class="sound-bar"></span>
+      <span class="sound-bar"></span>
+      <span class="sound-bar"></span>
+    </span>
+  </button>
+
+  <!-- Bottom Floating Navigation Dock -->
+  <header id="hdr">
+    <nav class="dock-bar" aria-label="Main">
+      <div class="dock-pill" aria-hidden="true"></div>
+
+      <a class="dock-item active" href="#home" data-target="home" aria-current="page">
+        <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+          <path
+            d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        </svg>
+        <span class="dock-label">Home</span>
+      </a>
+
+      <a class="dock-item" href="#about" data-target="about">
+        <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="5" />
+          <path d="M20 21a8 8 0 0 0-16 0" />
+        </svg>
+        <span class="dock-label">About</span>
+      </a>
+
+      <a class="dock-item" href="#gaming" data-target="gaming">
+        <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="6" y1="12" x2="10" y2="12" />
+          <line x1="8" y1="10" x2="8" y2="14" />
+          <line x1="15" y1="11" x2="15" y2="11" />
+          <line x1="18" y1="13" x2="18" y2="13" />
+          <rect x="2" y="7" width="20" height="10" rx="5" />
+        </svg>
+        <span class="dock-label">Gaming</span>
+      </a>
+
+      <a class="dock-item" href="#gallery" data-target="gallery">
+        <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <path d="M21 15l-5-5L5 21" />
+        </svg>
+        <span class="dock-label">Gallery</span>
+      </a>
+
+      <a class="dock-item" href="#projects" data-target="projects">
+        <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+        </svg>
+        <span class="dock-label">Projects</span>
+      </a>
+
+      <a class="dock-item" href="#skills" data-target="skills">
+        <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+        </svg>
+        <span class="dock-label">Skills</span>
+      </a>
+
+      <a class="dock-item" href="#contact" data-target="contact">
+        <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+        <span class="dock-label">Contact</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Main Multi-Section Structure -->
+  <main id="main-content">
+    <section class="hero-screen" id="home"></section>
+    <section class="site-section" id="about"></section>
+    <section class="site-section" id="gaming"></section>
+    <section class="site-section" id="gallery"></section>
+    <section class="site-section" id="projects"></section>
+    <section class="site-section" id="skills"></section>
+    <section class="site-section" id="contact"></section>
+  </main>
+
+  <!-- Data Files -->
+  <script src="data/profile.js"></script>
+  <script src="data/links.js"></script>
+  <script src="data/projects.js"></script>
+  <script src="data/skills.js"></script>
+  <script src="data/setup.js"></script>
+  <script src="data/gallery.js"></script>
+  <script src="data/contact.js"></script>
+  <script src="data/about.js?v=2"></script>
+  <script src="data/site.js?v=1"></script>
+  <script src="data/i18n.js?v=2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  
+  <script src="js/main.js?v=54"></script>
+  <script src="js/heading-fx.js?v=1"></script>
+  <script src="js/social.js"></script>
+</body>
+
+</html>
