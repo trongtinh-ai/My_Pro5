@@ -1011,3 +1011,173 @@ html.lite .cine-corner {
     display: none;
   }
 }
+
+/* ---- God mode: ẩn toàn bộ các mục từ About đến Contact ---- */
+html.ssj-3 #about,
+html.ssj-3 #gaming,
+html.ssj-3 #gallery,
+html.ssj-3 #projects,
+html.ssj-3 #skills,
+html.ssj-3 #contact,
+html.ssj-3 #hdr,
+html.ssj-3 .dock-bar {
+  display: none !important;
+}
+
+/* ẩn luôn các nút tương ứng trên thanh dock (chỉ giữ Home) */
+html.ssj-3 .dock-item:not([data-target="home"]) {
+  display: none !important;
+}
+
+/* ===== Thẻ nguồn nhạc: mở ra từ nút BGM ===== */
+.now-playing {
+  position: fixed;
+  top: 40px;
+  left: 72px;
+  translate: 0 -50%;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(310px, calc(100vw - 96px));
+  padding: 14px 18px 14px 16px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(48, 12, 20, 0.9), rgba(9, 13, 24, 0.92));
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 59, 74, 0.4);
+  pointer-events: none;
+  visibility: hidden;
+  clip-path: inset(0 100% 0 0 round 18px);
+  will-change: clip-path;
+  transition: clip-path 0.45s cubic-bezier(0.65, 0, 0.35, 1), visibility 0s 0.45s;
+}
+
+.now-playing.show {
+  visibility: visible;
+  clip-path: inset(0 0 0 0 round 18px);
+  transition: clip-path 0.6s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s;
+}
+
+/* nội dung: mờ trước khi thu, trượt vào sau khi thẻ mở */
+.np-eq,
+.np-body {
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.now-playing.show .np-eq,
+.now-playing.show .np-body {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.35s ease 0.2s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+
+/* equalizer */
+.np-eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.np-eq i {
+  display: block;
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(#ff9aa2, #ff3b4a);
+  transform-origin: bottom;
+  animation: npEq 0.9s ease-in-out infinite alternate;
+}
+
+.np-eq i:nth-child(1) {
+  animation-delay: -0.2s;
+}
+
+.np-eq i:nth-child(2) {
+  animation-delay: -0.55s;
+}
+
+.np-eq i:nth-child(3) {
+  animation-delay: -0.1s;
+}
+
+.np-eq i:nth-child(4) {
+  animation-delay: -0.7s;
+}
+
+.now-playing:not(.show) .np-eq i {
+  animation-play-state: paused;
+}
+
+@keyframes npEq {
+  from {
+    transform: scaleY(0.25);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* chữ: mỗi thứ một dòng */
+.np-body {
+  display: block;
+  min-width: 0;
+}
+
+.np-label,
+.np-title,
+.np-artist,
+.np-credit {
+  display: block;
+}
+
+.np-label {
+  font: 700 9px var(--font-head);
+  letter-spacing: 0.24em;
+  color: #ff6b76;
+  margin-bottom: 4px;
+}
+
+.np-title {
+  font: 700 15px/1.25 var(--font-head);
+  letter-spacing: 0.01em;
+  color: #ffffff;
+}
+
+.np-artist {
+  font: 500 12px/1.4 var(--font-body);
+  color: #e6c9cd;
+  margin-top: 2px;
+}
+
+.np-credit {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font: 500 10.5px/1.55 var(--font-body);
+  color: #94a3b8;
+}
+
+@media (max-width: 599.98px) {
+  .now-playing {
+    top: 34px;
+    left: 62px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .np-eq i {
+    animation: none;
+    transform: scaleY(0.7);
+  }
+
+  .now-playing,
+  .now-playing.show {
+    transition-duration: 0.01s;
+  }
+}

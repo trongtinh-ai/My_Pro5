@@ -105,7 +105,7 @@ const t = (k, d) => (T[k] != null ? T[k] : (d != null ? d : k));
 Object.assign(C, (C.i18n && C.i18n[LANG]) || {});
 
 Object.entries(C.theme || {}).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
-const bgUrlStr = url(C.images.bg);
+const bgUrlStr = C.images.bg ? url(C.images.bg) : "none";
 document.documentElement.style.setProperty("--bg-url", bgUrlStr);
 document.documentElement.style.setProperty("--bg-pos", C.layout.bgPosition);
 const bgEl = document.querySelector(".bg-img");
@@ -125,7 +125,7 @@ function videoOn(on) {
   if (on) {
     if (!bvReady) {
       forceVid();
-      bv.poster = C.images.bg || "./assets/images/bg.jpg";
+      if (C.images.bg) bv.poster = C.images.bg;
       if (!bv.getAttribute("src")) bv.src = C.images.bgVideo;
       bv.onerror = () => { console.warn("Video failed to play:", C.images.bgVideo); bv.remove(); };
       bvReady = true;
@@ -1652,10 +1652,10 @@ renderGallery();
 
   const SAIYAN_AUDIO_CONFIG = {
     files: {
-      ssj1: "assets/audio/ssj-1.mp3",
-      ssj2: "assets/audio/ssj-2.mp3",
-      charge: "assets/audio/ssj-charge.mp3",
-      down: "assets/audio/ssj-down.mp3",
+      ssj1: "",
+      ssj2: "",
+      charge: "",
+      down: "",
     },
     volume: {
       ssj1: 0.65,
@@ -1674,7 +1674,7 @@ renderGallery();
   let activeSaiyanAudio = null;
 
   function preloadSaiyanAudio() {
-    Object.values(SAIYAN_AUDIO_CONFIG.files).forEach(src => {
+    Object.values(SAIYAN_AUDIO_CONFIG.files).filter(Boolean).forEach(src => {
       if (!saiyanAudioCache[src]) {
         const a = new Audio(src);
         a.preload = "auto";
@@ -2222,4 +2222,130 @@ if ($("bg")) $("bg").style.transform = "none";
   });
 
   window.addEventListener("resize", () => { bounds = null; }, { passive: true });
+})();
+/* ---------- Đổi nhạc nền theo cấp Saiyan + tự bật khi lên God ---------- */
+/* ---------- Nhạc theo cấp Saiyan: God tự bật, về base tự tắt ---------- */
+(function levelMusic() {
+  const bgm = window.__bgmAudio;
+  if (!bgm) return;
+  const root = document.documentElement;
+  const NORMAL = bgm.src;                          // nhạc thường (music.mp3)
+  const TRACKS = { 3: "./assets/audio/god.mp3" };  // cấp → file nhạc
+  const AUTO_PLAY_LEVEL = 3;                       // lên cấp này thì tự bật nhạc
+  let current = NORMAL;
+  let prev = 0;
+  let swapT = null;
+
+  function setTrack(src, resume = true) {
+    if (current === src) return;
+    current = src;
+    const wasPlaying = resume && !bgm.paused;
+    bgm.src = src;
+    bgm.loop = true;
+    if (wasPlaying) bgm.play().catch(() => { });
+  }
+
+  bgm.addEventListener("error", () => {
+    if (current !== NORMAL) setTrack(NORMAL);
+  });
+
+  function sync() {
+    let lv = 0;
+    for (const n of [3, 2, 1]) {
+      if (root.classList.contains("ssj-" + n)) { lv = n; break; }
+    }
+    const btn = document.getElementById("music-btn");
+    clearTimeout(swapT);
+
+    if (lv === 0 && prev !== 0) {
+      // về base: tắt nhạc (có fade), rồi trả lại nhạc thường nhưng KHÔNG phát
+      if (!bgm.paused && btn) btn.click();
+      swapT = setTimeout(() => setTrack(NORMAL, false), 450);
+    } else {
+      setTrack(TRACKS[lv] || NORMAL);
+    }
+
+    // vừa chuyển lên God và nhạc đang tắt → bật
+    if (lv === AUTO_PLAY_LEVEL && prev !== AUTO_PLAY_LEVEL && bgm.paused && btn) {
+      btn.click();
+    }
+    prev = lv;
+  }
+
+  new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ["class"] });
+  sync();
+})();
+/* ===== Thẻ nguồn nhạc: mở ra từ nút BGM ===== */
+/* ---------- Thẻ nguồn nhạc: mở ra từ nút BGM rồi thu lại ---------- */
+(function nowPlaying() {
+  const bgm = window.__bgmAudio;
+  if (!bgm) return;
+  const root = document.documentElement;
+  const SHOW_MS = 4500;   // thẻ nằm ngoài bao lâu (ms) rồi thu vào nút BGM
+
+  // cấp → thông tin bài (sửa ở đây)
+  const NOW = {
+    3: {
+      title: "Shape of You",
+      artist: "Ed Sheeran",
+      credit: "Nhạc nền chế độ God · Chỉ dùng cá nhân, không thương mại"
+    }
+  };
+
+  const pill = document.createElement("div");
+  pill.className = "now-playing";
+  pill.innerHTML =
+    '<div class="np-eq"><i></i><i></i><i></i><i></i></div>' +
+    '<div class="np-body">' +
+    '<span class="np-label">ĐANG PHÁT</span>' +
+    '<b class="np-title"></b>' +
+    '<span class="np-artist"></span>' +
+    '<span class="np-credit"></span>' +
+    '</div>';
+  document.body.appendChild(pill);
+  const elTitle = pill.querySelector(".np-title");
+  const elArtist = pill.querySelector(".np-artist");
+  const elCredit = pill.querySelector(".np-credit");
+
+  let timer = null;
+  let lastLv = -1;
+
+  function level() {
+    for (const n of [3, 2, 1]) if (root.classList.contains("ssj-" + n)) return n;
+    return 0;
+  }
+
+  function hide() {
+    clearTimeout(timer);
+    pill.classList.remove("show");
+  }
+
+  function reveal() {
+    const info = NOW[level()];
+    if (!info || bgm.paused) { hide(); return; }
+    elTitle.textContent = info.title;
+    elArtist.textContent = info.artist || "";
+    elArtist.style.display = info.artist ? "" : "none";
+    elCredit.textContent = info.credit || "";
+    elCredit.style.display = info.credit ? "" : "none";
+    pill.classList.add("show");
+    clearTimeout(timer);
+    timer = setTimeout(hide, SHOW_MS);
+  }
+
+  bgm.addEventListener("play", reveal);
+  bgm.addEventListener("pause", hide);
+  bgm.addEventListener("ended", hide);
+
+  new MutationObserver(() => {
+    const lv = level();
+    if (lv === lastLv) return;
+    lastLv = lv;
+    reveal();
+  }).observe(root, { attributes: true, attributeFilter: ["class"] });
+  lastLv = level();
+
+  // rê chuột vào nút BGM → thẻ mở lại để đọc credit
+  const btn = document.getElementById("music-btn");
+  if (btn) btn.addEventListener("mouseenter", reveal);
 })();
