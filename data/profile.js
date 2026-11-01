@@ -11,7 +11,7 @@ window.PROFILE = {
 
   contactInfo: {
     email: "trongtinh280206@gmail.com",
-    phone: "+84 90 123 4567",
+    phone: "",
     discord: "itrongtinhh",
     school: "FPT University",
     location: "Vietnam"
