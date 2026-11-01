@@ -1173,8 +1173,9 @@ renderGallery();
   }
 
   range.addEventListener("input", () => setLevel(+range.value));
+  window.__bgmVol = { get: () => level, set: v => setLevel(v) };
   renderVolumeUI();
-
+  document.dispatchEvent(new CustomEvent("bgmvol", { detail: level }));
   let hideT = null, dragging = false;
 
   function placePop() {
@@ -2281,9 +2282,8 @@ if ($("bg")) $("bg").style.transform = "none";
   const bgm = window.__bgmAudio;
   if (!bgm) return;
   const root = document.documentElement;
-  const SHOW_MS = 4500;   // thẻ nằm ngoài bao lâu (ms) rồi thu vào nút BGM
+  const SHOW_MS = 4500;
 
-  // cấp → thông tin bài (sửa ở đây)
   const NOW = {
     3: {
       title: "Shape of You",
@@ -2292,32 +2292,95 @@ if ($("bg")) $("bg").style.transform = "none";
     }
   };
 
+  /* ---------- dựng thẻ ---------- */
   const pill = document.createElement("div");
   pill.className = "now-playing";
   pill.innerHTML =
+    '<div class="np-top">' +
     '<div class="np-eq"><i></i><i></i><i></i><i></i></div>' +
     '<div class="np-body">' +
     '<span class="np-label">ĐANG PHÁT</span>' +
     '<b class="np-title"></b>' +
     '<span class="np-artist"></span>' +
-    '<span class="np-credit"></span>' +
-    '</div>';
+    '</div>' +
+    '</div>' +
+    '<div class="np-vol">' +
+    '<span class="np-vol-ico"></span>' +
+    '<input class="vol-range np-range" type="range" min="0" max="100" step="1" aria-label="Music volume">' +
+    '<b class="np-vol-val"></b>' +
+    '</div>' +
+    '<div class="np-credit"></div>';
   document.body.appendChild(pill);
+
   const elTitle = pill.querySelector(".np-title");
   const elArtist = pill.querySelector(".np-artist");
   const elCredit = pill.querySelector(".np-credit");
+  const range = pill.querySelector(".np-range");
+  const volIco = pill.querySelector(".np-vol-ico");
+  const volVal = pill.querySelector(".np-vol-val");
 
-  let timer = null;
-  let lastLv = -1;
-
-  function level() {
-    for (const n of [3, 2, 1]) if (root.classList.contains("ssj-" + n)) return n;
-    return 0;
+  /* ---------- volume: cập nhật giao diện thẻ ---------- */
+  let shown = -1;
+  function paintVol(v) {
+    v = Math.max(0, Math.min(100, Math.round(v)));
+    range.value = v;
+    range.style.setProperty("--p", v + "%");    // phần tô màu bên trái nút tròn
+    volVal.textContent = v + "%";               // số %
+    const mute = v === 0;
+    if (mute !== (shown === 0)) volIco.innerHTML = ic(mute ? "mute" : "vol");
+    shown = v;
   }
+
+  const V = window.__bgmVol;                    // do initBGM cung cấp
+  if (V) {
+    volIco.innerHTML = ic(V.get() === 0 ? "mute" : "vol");
+    paintVol(V.get());
+
+    // kéo thanh: tự cập nhật thẻ trước, rồi mới áp vào âm lượng thật
+    const onSlide = () => {
+      const v = +range.value;
+      paintVol(v);
+      V.set(v);
+    };
+    range.addEventListener("input", onSlide);
+    range.addEventListener("change", onSlide);
+
+    // đổi volume từ chỗ khác (popup cũ) thì thẻ cũng theo
+    document.addEventListener("bgmvol", e => {
+      if (e.detail !== +range.value) paintVol(e.detail);
+    });
+  } else {
+    pill.querySelector(".np-vol").remove();
+  }
+
+  /* ---------- giữ thẻ mở khi đang rê chuột / kéo / focus ---------- */
+  let timer = null, dragging = false, lastLv = -1;
+  const busy = () =>
+    dragging || pill.matches(":hover") || pill.contains(document.activeElement);
 
   function hide() {
     clearTimeout(timer);
     pill.classList.remove("show");
+  }
+  function arm(ms) {
+    clearTimeout(timer);
+    timer = setTimeout(() => { if (busy()) arm(1200); else hide(); }, ms || SHOW_MS);
+  }
+
+  pill.addEventListener("pointerdown", () => { dragging = true; clearTimeout(timer); });
+  addEventListener("pointerup", () => {
+    if (!dragging) return;
+    dragging = false;
+    if (pill.classList.contains("show")) arm(2500);
+  });
+  pill.addEventListener("pointerleave", () => {
+    if (pill.classList.contains("show") && !dragging) arm(1500);
+  });
+
+  /* ---------- hiện thẻ theo cấp Saiyan ---------- */
+  function level() {
+    for (const n of [3, 2, 1]) if (root.classList.contains("ssj-" + n)) return n;
+    return 0;
   }
 
   function reveal() {
@@ -2328,9 +2391,9 @@ if ($("bg")) $("bg").style.transform = "none";
     elArtist.style.display = info.artist ? "" : "none";
     elCredit.textContent = info.credit || "";
     elCredit.style.display = info.credit ? "" : "none";
+    if (V) paintVol(V.get());
     pill.classList.add("show");
-    clearTimeout(timer);
-    timer = setTimeout(hide, SHOW_MS);
+    arm();
   }
 
   bgm.addEventListener("play", reveal);
@@ -2345,7 +2408,132 @@ if ($("bg")) $("bg").style.transform = "none";
   }).observe(root, { attributes: true, attributeFilter: ["class"] });
   lastLv = level();
 
-  // rê chuột vào nút BGM → thẻ mở lại để đọc credit
   const btn = document.getElementById("music-btn");
   if (btn) btn.addEventListener("mouseenter", reveal);
+})();
+/* ---------- Thông điệp God: gõ chữ giữa màn hình ---------- */
+(function godMessage() {
+  const LINES = C.godMessage;
+  if (!Array.isArray(LINES) || !LINES.length) return;
+
+  const root = document.documentElement;
+  const TYPE_MS = 38;      // ms mỗi ký tự
+  const LINE_GAP = 550;    // nghỉ giữa các dòng
+  const HOLD_MS = 6000;    // giữ chữ sau khi gõ xong
+  const NO_CINE_DELAY = 1200;
+  const CINE_DELAY = 2900; // chờ cảnh biến hình xong
+
+  const layer = document.createElement("div");
+  layer.className = "god-msg";
+  layer.setAttribute("role", "status");
+  layer.setAttribute("aria-label", LINES.join(" "));
+  const box = document.createElement("div");
+  box.className = "god-msg-box";
+  const els = LINES.map((_, i) => {
+    const p = document.createElement("p");
+    p.className = "god-msg-line" + (i === 0 ? " first" : "");
+    p.setAttribute("aria-hidden", "true");
+    box.appendChild(p);
+    return p;
+  });
+  layer.appendChild(box);
+  document.body.appendChild(layer);
+
+  const cursor = document.createElement("span");
+  cursor.className = "god-msg-cur";
+  cursor.textContent = "|";
+
+  const isLite = () =>
+    !!(window.FX && window.FX.lite) ||
+    matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let timers = [];
+  let state = "idle";   // idle | wait | typing | holding
+  const later = (fn, ms) => { const id = setTimeout(fn, ms); timers.push(id); return id; };
+  const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
+
+  function fillAll() {
+    els.forEach((el, i) => { el.textContent = LINES[i]; });
+    cursor.remove();
+  }
+
+  function reset() {
+    clearTimers();
+    layer.classList.remove("show", "out");
+    els.forEach(el => { el.textContent = ""; });
+    cursor.remove();
+    state = "idle";
+  }
+
+  function fadeOut() {
+    if (state === "idle") return;
+    clearTimers();
+    cursor.remove();
+    layer.classList.add("out");
+    layer.classList.remove("show");
+    state = "idle";
+    later(() => { layer.classList.remove("out"); els.forEach(el => { el.textContent = ""; }); }, 1100);
+  }
+
+  function holdThenFade() {
+    state = "holding";
+    cursor.remove();
+    later(fadeOut, HOLD_MS);
+  }
+
+  function typeLine(i) {
+    if (i >= LINES.length) { holdThenFade(); return; }
+    const el = els[i], text = LINES[i];
+    let k = 0;
+    el.textContent = "";
+    el.appendChild(cursor);
+    (function tick() {
+      if (k < text.length) {
+        el.insertBefore(document.createTextNode(text[k++]), cursor);
+        later(tick, TYPE_MS);
+      } else {
+        later(() => typeLine(i + 1), LINE_GAP);
+      }
+    })();
+  }
+
+  function start() {
+    reset();
+    layer.classList.add("show");
+    if (isLite()) {
+      fillAll();
+      holdThenFade();
+      return;
+    }
+    state = "typing";
+    typeLine(0);
+  }
+
+  /* lên God → chờ cảnh biến hình xong rồi mới hiện */
+  let wasGod = false;
+  new MutationObserver(() => {
+    const god = root.classList.contains("ssj-3");
+    if (god === wasGod) return;
+    wasGod = god;
+    if (god) {
+      reset();
+      state = "wait";
+      later(start, root.classList.contains("cine-on") && !isLite() ? CINE_DELAY : NO_CINE_DELAY);
+    } else {
+      reset();          // power down: tắt ngay
+    }
+  }).observe(root, { attributes: true, attributeFilter: ["class"] });
+
+  /* bấm: lần 1 hiện hết chữ, lần 2 tắt */
+  document.addEventListener("click", e => {
+    if (state === "idle" || state === "wait") return;
+    if (e.target.closest(".cine-corner, #music-btn, .now-playing")) return;
+    if (state === "typing") {
+      clearTimers();
+      fillAll();
+      holdThenFade();
+    } else {
+      fadeOut();
+    }
+  });
 })();

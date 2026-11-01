@@ -26,6 +26,13 @@ window.PROFILE = {
       heroQuote: ["\u201cKhông phải là người giỏi nhất,", "nhưng luôn cố gắng trở thành phiên bản tốt hơn mỗi ngày.\u201d"],
       bubble: ["\u201cTrở thành phiên bản tốt hơn,", "từng ngày một.\u201d"],
       quote: { text: "\u201cTừng bước nhỏ mỗi ngày sẽ tạo nên kết quả lớn.\u201d", sign: "Tinh" },
+      godMessage: [
+        "Hello! Chào cậu, tớ là Tình. Rất vui được gặp cậu. ^^",
+        "Dù là thân hay lạ quen biết hoặc chưa quen nhau, nhưng đến được tới đây có thể cậu tò mò về tớ?",
+        "Cảm ơn cậu đã nán lại và bấm trúng góc ẩn này. Chúc cậu một ngày vui vẻ và tràn đầy năng lượng nhé!",
+        "Đây là không gian ẩn mình vẫn đang thiết kế, nếu cậu có ý tưởng gì thì cho tớ biết nhé!",
+        "Muốn quay về thì bấm vào avatar ở góc dưới bên phải nha."
+      ],
       buttons: [
         { label: "View Projects", icon: "code", action: "scroll:projects", primary: true },
         { label: "Download CV", icon: "download", action: "link:./assets/docs/cv.pdf" }
@@ -46,6 +53,13 @@ window.PROFILE = {
       roles: ["Student", "Gamer"],
       heroQuote: ["\u201cNot the smartest in the room,", "but striving to become a better version every day.\u201d"],
       bubble: ["\u201cBetter version of myself,", "one day at a time.\u201d"],
+      godMessage: [
+        "Hello! I'm Tinh. So glad to meet you. ^^",
+        "Whether we already know each other or not, you made it all the way here. Maybe you're curious about me?",
+        "Thanks for sticking around and finding this hidden corner. Have a happy day, full of energy!",
+        "This hidden space is still under construction. If you have any ideas, let me know!",
+        "To go back, click the avatar in the bottom-right corner."
+      ],
       quote: { text: "\u201cSmall steps every day lead to big results.\u201d", sign: "Tinh" },
       buttons: [
         { label: "View Projects", icon: "code", action: "scroll:projects", primary: true },

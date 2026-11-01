@@ -1030,57 +1030,93 @@ html.ssj-3 .dock-item:not([data-target="home"]) {
 }
 
 /* ===== Thẻ nguồn nhạc: mở ra từ nút BGM ===== */
+/* ===== Thẻ nhạc God: tên bài + volume + credit trong 1 khối ===== */
+html.ssj-3 .vol-pop {
+  display: none !important;
+}
+
+/* volume đã nằm trong thẻ */
+
 .now-playing {
   position: fixed;
-  top: 40px;
+  top: 20px;
   left: 72px;
-  translate: 0 -50%;
   z-index: 100;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 14px;
-  width: min(310px, calc(100vw - 96px));
-  padding: 14px 18px 14px 16px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, rgba(48, 12, 20, 0.9), rgba(9, 13, 24, 0.92));
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 59, 74, 0.4);
+  width: min(300px, calc(100vw - 96px));
+  padding: 16px 18px 14px;
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgba(255, 59, 74, 0.22), transparent 60%),
+    linear-gradient(160deg, rgba(34, 10, 18, 0.92), rgba(8, 11, 22, 0.94));
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 59, 74, 0.38);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55),
+    0 0 28px rgba(255, 59, 74, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
   pointer-events: none;
   visibility: hidden;
-  clip-path: inset(0 100% 0 0 round 18px);
+  clip-path: inset(0 100% 0 0 round 20px);
   will-change: clip-path;
   transition: clip-path 0.45s cubic-bezier(0.65, 0, 0.35, 1), visibility 0s 0.45s;
 }
 
 .now-playing.show {
   visibility: visible;
-  clip-path: inset(0 0 0 0 round 18px);
+  pointer-events: auto;
+  /* cho phép kéo thanh volume */
+  clip-path: inset(0 0 0 0 round 20px);
   transition: clip-path 0.6s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s;
 }
 
 /* nội dung: mờ trước khi thu, trượt vào sau khi thẻ mở */
-.np-eq,
-.np-body {
+.np-top,
+.np-vol,
+.np-credit {
   opacity: 0;
   transform: translateX(-10px);
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.now-playing.show .np-eq,
-.now-playing.show .np-body {
+.now-playing.show .np-top,
+.now-playing.show .np-vol,
+.now-playing.show .np-credit {
   opacity: 1;
   transform: none;
   transition: opacity 0.35s ease 0.2s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
 }
 
-/* equalizer */
+.now-playing.show .np-vol {
+  transition-delay: 0.28s;
+}
+
+.now-playing.show .np-credit {
+  transition-delay: 0.36s;
+}
+
+/* hàng trên: equalizer + tên bài */
+.np-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
 .np-eq {
   display: flex;
   align-items: flex-end;
   gap: 3px;
-  height: 28px;
+  height: 34px;
+  padding: 0 12px;
   flex-shrink: 0;
+  border-radius: 12px;
+  background: rgba(255, 59, 74, 0.1);
+  border: 1px solid rgba(255, 59, 74, 0.25);
+  padding-block: 8px;
+  box-sizing: border-box;
+  height: 44px;
 }
 
 .np-eq i {
@@ -1123,7 +1159,6 @@ html.ssj-3 .dock-item:not([data-target="home"]) {
   }
 }
 
-/* chữ: mỗi thứ một dòng */
 .np-body {
   display: block;
   min-width: 0;
@@ -1131,8 +1166,7 @@ html.ssj-3 .dock-item:not([data-target="home"]) {
 
 .np-label,
 .np-title,
-.np-artist,
-.np-credit {
+.np-artist {
   display: block;
 }
 
@@ -1140,32 +1174,74 @@ html.ssj-3 .dock-item:not([data-target="home"]) {
   font: 700 9px var(--font-head);
   letter-spacing: 0.24em;
   color: #ff6b76;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .np-title {
-  font: 700 15px/1.25 var(--font-head);
-  letter-spacing: 0.01em;
-  color: #ffffff;
+  font: 700 16px/1.25 var(--font-head);
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .np-artist {
   font: 500 12px/1.4 var(--font-body);
   color: #e6c9cd;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
+/* hàng volume: viên thuốc tối, nằm giữa tên bài và credit */
+.np-vol {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.np-vol-ico {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  color: #ff6b76;
+}
+
+.np-vol-ico svg.i {
+  width: 16px;
+  height: 16px;
+}
+
+.np-vol .vol-range {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+}
+
+.np-vol-val {
+  min-width: 34px;
+  text-align: right;
+  font: 700 12px/1 var(--font-head);
+  letter-spacing: 0.06em;
+  color: #e6c9cd;
+  font-variant-numeric: tabular-nums;
+}
+
+/* credit */
 .np-credit {
-  margin-top: 9px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: block;
+  padding-top: 11px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
   font: 500 10.5px/1.55 var(--font-body);
   color: #94a3b8;
 }
 
 @media (max-width: 599.98px) {
   .now-playing {
-    top: 34px;
+    top: 14px;
     left: 62px;
   }
 }
@@ -1179,5 +1255,76 @@ html.ssj-3 .dock-item:not([data-target="home"]) {
   .now-playing,
   .now-playing.show {
     transition-duration: 0.01s;
+  }
+}
+
+/* ===== Thông điệp God ===== */
+.god-msg {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  /* dưới nút avatar (90) và thẻ nhạc (100) */
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  pointer-events: none;
+  /* không chặn bấm; click bắt ở document */
+  opacity: 0;
+  transform: translateY(8px);
+  background: radial-gradient(ellipse 60% 45% at 50% 50%,
+      rgba(8, 4, 10, 0.62) 0%, rgba(8, 4, 10, 0.32) 55%, transparent 100%);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.god-msg.show {
+  opacity: 1;
+  transform: none;
+}
+
+.god-msg.out {
+  opacity: 0;
+  transform: translateY(-14px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.god-msg-box {
+  max-width: 640px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.god-msg-line {
+  margin: 0;
+  min-height: 1.5em;
+  font: 500 clamp(15px, 1.7vw, 19px)/1.6 var(--font-body);
+  color: #fff;
+  text-shadow: 0 0 14px rgba(255, 59, 74, 0.55), 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.god-msg-line.first {
+  font: 800 clamp(26px, 3.4vw, 40px)/1.25 var(--font-head);
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 22px rgba(255, 59, 74, 0.75), 0 2px 12px rgba(0, 0, 0, 0.8);
+}
+
+.god-msg-cur {
+  display: inline-block;
+  margin-left: 2px;
+  color: #ff6b76;
+  font-weight: 400;
+  animation: cursorBlink 0.75s step-start infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .god-msg,
+  .god-msg.out {
+    transition-duration: 0.01s;
+  }
+
+  .god-msg-cur {
+    animation: none;
   }
 }
